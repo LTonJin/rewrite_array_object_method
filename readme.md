@@ -9,3 +9,7 @@
 重写Object的静态方法
  * create
  * assign
+ * freeze
+ * entries
+ * fromEntries
+ * seal

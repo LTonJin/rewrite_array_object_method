@@ -102,3 +102,70 @@ const obj = {
 //   }
 // }
 // console.log(Object.myAssign({}, o1));
+
+
+// var obj1 = {
+//   a: 1,
+//   b: 2,
+//   c: {
+//     d: 3
+//   }
+// }
+// Object.deepFreeze(obj1);
+
+// obj1.a = 1111;
+// obj1.e = 222;
+// delete obj1.a
+// obj1.c.d = 3333
+// console.log(obj1);
+
+
+// const objEntries = Object.entries(obj);
+// console.log(objEntries, "objEntries");
+
+// var dObj = Object.defineProperties({}, {
+//   a: {
+//     value: 1,
+//     enumerable: true
+//   },
+//   b: {
+//     value: 2,
+//     enumerable: true
+//   }
+// })
+// // 属性必须可枚举
+// const dObjEntries = Object.entries(dObj);
+// console.log(dObjEntries, "dObjEntries");
+// // 可以将entries数据转为map数据
+// const m = new Map(dObjEntries);
+// for (const k of m) {
+//   console.log(k ,m);
+// }
+// console.log(m, 'mmmmm');
+
+// // 自己实现
+// const dObjMyEntries = Object.myEntries(dObj);
+// console.log(dObjMyEntries, "dObjMyEntries");
+
+// const from = Object.myFromEntries(dObjMyEntries);
+// const fromM = Object.myFromEntries(m);
+// console.log(from, 'from');
+// console.log(fromM, 'fromM');
+
+// const o = Object.myFreeze(obj);
+// o.a = 1111;
+// delete o.name;
+// o.name = 'll'
+// console.log(o);
+
+// Object.mySeal(obj);
+// obj.name = 'zs'
+// delete obj.name;
+// obj.a = 111;
+// console.log(obj);
+
+const obj1 = Object.deepSeal(obj);
+console.log(obj === obj1);
+
+delete obj.skill[1]
+console.log(obj);

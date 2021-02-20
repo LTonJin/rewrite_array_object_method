@@ -125,6 +125,10 @@ Array.prototype.myFilter = function (cb, obj = window) {
  * 重写Object的静态方法
  * create
  * assign
+ * freeze
+ * entries
+ * fromEntries
+ * seal
  */
 
 /**
@@ -162,4 +166,99 @@ Array.prototype.myFilter = function (cb, obj = window) {
       Object.defineProperties(target, descriptors);
     });
     return target;
+  }
+
+  /**
+   * freeze，特点可读性，不可写，不可扩展，不可删除
+   */
+
+  Object.myFreeze = function (o) {
+    for (const k in o) {
+      if (o.hasOwnProperty(k)) {
+        Object.defineProperty(o, k, {
+          writable: false,
+          configurable: false,
+
+        })
+        Object.preventExtensions(o);
+        
+      }
+    }
+    return o;
+  }
+  
+
+  /**
+   * freeze返回对象本身
+   * 接受参数为object，如果是基本类型则返回数据本身（ES5之前会报错）
+   * 因为freeze为浅冻结，我们自己实现一个深冻结
+   */
+
+  Object.deepFreeze = function (o) {
+    Object.getOwnPropertyNames(o).forEach(key => {
+      if(typeof o[key] === 'object' && o[key] !== null)
+        Object.deepFreeze(o[key]);
+    })
+    return Object.freeze(o);
+  }
+
+  /**
+   * entries是方法是将对象转为健值对数组
+   */
+  
+  Object.myEntries = function (o) {
+    var _pool = [];
+    if (Object.prototype.toString.call(o) === '[object Object]') {
+      for (const k in o) {
+        if (o.hasOwnProperty(k)) {
+          var _arr = [k, o[k]];
+          _pool.push(_arr);
+          
+        }
+      }
+    }
+    return _pool;
+  }
+
+  /**
+   * fromEntries是将健值对数组转为对象
+   */
+
+  Object.myFromEntries = function (arr) {
+    var _o = {};
+    for (const [k, v] of arr) {
+      _o[k] = v
+    }
+    return _o;
+  }
+
+
+  /**
+   * seal是密封对象和freeze的区别是可修改
+   */
+
+  Object.mySeal = function (o) {
+    for (const k in o) {
+      if (o.hasOwnProperty(k)) {
+        Object.defineProperty(o, k, {
+          writable: true,
+          configurable: false,
+        });
+        Object.preventExtensions(o);
+        
+      }
+    }
+    return o;
+  }
+
+  /**
+   * seal是浅密封，我们自己实现一个深密封
+   */
+
+  Object.deepSeal = function (o) {
+    Object.getOwnPropertyNames(o).forEach(k => {
+      if(typeof o[k] === 'object')
+        Object.deepSeal(o[k]);
+    })
+    return Object.mySeal(o);
   }
